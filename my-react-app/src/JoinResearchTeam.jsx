@@ -1,252 +1,508 @@
 import React, { useState } from "react";
+import styled, { keyframes, createGlobalStyle } from "styled-components";
 
-const palette = {
-  primary: "#e3b06d",
-  accent: "#fff3e0",
-  border: "#b58c41",
-  dark: "#413019",
-  light: "#fdf6ed"
-};
+// Animations
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
-function JoinResearchTeam() {
-  const [showPopup, setShowPopup] = useState(false);
-  const [showThankYou, setShowThankYou] = useState(false);
-  const [form, setForm] = useState({ email: "", message: "" });
+const float = keyframes`
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+`;
 
-  const handleChange = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
+// Global Styles
+const GlobalStyle = createGlobalStyle`
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #fdf6ed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
 
-  const handleJoin = () => setShowPopup(true);
+  #root {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+`;
 
-  const handleSubmit = (e) => {
+// Styled Components
+const MainContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+  padding: 20px;
+  background: linear-gradient(135deg, #fff9f0 0%, #fdf6ed 100%);
+`;
+
+const Header = styled.div`
+  text-align: center;
+  margin-bottom: 40px;
+  animation: ${fadeIn} 0.8s ease-out;
+`;
+
+const Logo = styled.div`
+  font-size: 3rem;
+  font-weight: 700;
+  color: #e3b06d;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+`;
+
+const Tagline = styled.p`
+  font-size: 1.2rem;
+  color: #666;
+  font-weight: 500;
+  font-style: italic;
+`;
+
+const ContentBox = styled.div`
+  background: white;
+  border-radius: 20px;
+  padding: 60px 50px;
+  box-shadow: 0 20px 60px rgba(227, 176, 109, 0.15);
+  border: 2px solid #e3b06d;
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+  animation: ${fadeIn} 0.8s ease-out;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: #e3b06d;
+  }
+`;
+
+const Badge = styled.div`
+  display: inline-block;
+  background: #e3b06d;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 30px;
+  animation: ${float} 3s ease-in-out infinite;
+`;
+
+const Title = styled.h1`
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2c1810;
+  margin-bottom: 20px;
+  line-height: 1.2;
+`;
+
+const Description = styled.p`
+  font-size: 1.1rem;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 40px;
+`;
+
+const FeaturesList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 40px;
+  text-align: left;
+`;
+
+const FeatureItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px 20px;
+  background: #fff9f0;
+  border-radius: 12px;
+  border: 1px solid #ffe8cc;
+`;
+
+const FeatureIcon = styled.div`
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: ${props => props.checked ? '#e3b06d' : '#f0f0f0'};
+  border: 2px solid ${props => props.checked ? '#e3b06d' : '#ddd'};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: white;
+  font-weight: bold;
+`;
+
+const FeatureText = styled.span`
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+  flex: 1;
+`;
+
+const JoinButton = styled.button`
+  background: #e3b06d;
+  color: white;
+  border: none;
+  padding: 16px 40px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 300px;
+  margin-top: 10px;
+
+  &:hover {
+    background: #d19a50;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(227, 176, 109, 0.3);
+  }
+`;
+
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+`;
+
+const ModalContent = styled.div`
+  background: white;
+  border-radius: 20px;
+  padding: 0;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  position: relative;
+`;
+
+const ModalHeader = styled.div`
+  padding: 30px 30px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+`;
+
+const ModalTitle = styled.h2`
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2c1810;
+`;
+
+const CloseButton = styled.button`
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: #666;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: #f5f5f5;
+  }
+`;
+
+const Form = styled.form`
+  padding: 30px;
+`;
+
+const FormGroup = styled.div`
+  margin-bottom: 20px;
+`;
+
+const Label = styled.label`
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #333;
+  text-align: left;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  font-family: inherit;
+
+  &:focus {
+    outline: none;
+    border-color: #e3b06d;
+  }
+`;
+
+const TextArea = styled.textarea`
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 100px;
+
+  &:focus {
+    outline: none;
+    border-color: #e3b06d;
+  }
+`;
+
+const FormActions = styled.div`
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+  margin-top: 30px;
+`;
+
+const CancelButton = styled.button`
+  background: transparent;
+  color: #666;
+  border: 2px solid #ddd;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: #f5f5f5;
+  }
+`;
+
+const SubmitButton = styled.button`
+  background: #e3b06d;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: #d19a50;
+  }
+`;
+
+const SuccessMessage = styled.div`
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  border-left: 4px solid #e3b06d;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  z-index: 1001;
+`;
+
+const JoinResearchTeam = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: ""
+  });
+
+  const features = [
+    { text: "Access to Ancient Texts", checked: false },
+    { text: "Expert Collaboration", checked: true },
+    { text: "Global Community", checked: false }
+  ];
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setShowPopup(false);
-    setShowThankYou(true);
+    
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    setShowModal(false);
+    setShowSuccess(true);
+    setFormData({ name: "", email: "", message: "" });
+
     setTimeout(() => {
-      setShowThankYou(false);
-      setForm({ email: "", message: "" });
-    }, 2000);
+      setShowSuccess(false);
+    }, 3000);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setFormData({ name: "", email: "", message: "" });
   };
 
   return (
-    <div style={{
-      minHeight: "100vh",
-      width: "100vw",
-      background: `linear-gradient(120deg, ${palette.accent} 50%, ${palette.primary} 100%)`,
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      fontFamily: "'Nunito', 'Roboto', Arial, sans-serif",
-      position: "relative",
-      boxSizing: "border-box"
-    }}>
-      {/* Central Hero Card */}
-      <div
-        style={{
-          width: "100%",
-          maxWidth: "640px",
-          background: palette.light,
-          borderRadius: "2rem",
-          boxShadow: "0 10px 38px rgba(190,125,37,0.17)",
-          border: `2px solid ${palette.border}`,
-          padding: "64px 38px 54px 38px",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <h1
-          style={{
-            textAlign: "center",
-            fontWeight: 800,
-            fontSize: "2.9rem",
-            color: palette.dark,
-            marginBottom: "22px",
-            letterSpacing: "-1.2px",
-            lineHeight: "1.1"
-          }}
-        >
-          Join as a Researcher
-        </h1>
-        <div
-          style={{
-            borderRadius: "1.1rem",
-            padding: "25px",
-            background: palette.accent,
-            color: palette.dark,
-            boxShadow: "0 2px 13px rgba(227,176,109,0.09)",
-            marginBottom: "38px",
-            fontWeight: 540,
-            fontSize: "1.25rem",
-            textAlign: "center",
-            lineHeight: "1.5"
-          }}
-        >
-          Become part of an enthusiastic research team.<br />
-          Collaborate on projects, share ideas, and build something impactful!
-        </div>
-        <button
-          onClick={handleJoin}
-          style={{
-            width: "80%",
-            maxWidth: "320px",
-            padding: "20px",
-            fontWeight: 700,
-            fontSize: "1.25rem",
-            color: "#fff",
-            background: `linear-gradient(90deg, ${palette.primary} 60%, ${palette.border})`,
-            border: "none",
-            borderRadius: "1rem",
-            boxShadow: "0 4px 12px rgba(190,125,37,0.13)",
-            cursor: "pointer",
-            transition: "filter 0.18s",
-            marginTop: "16px",
-            marginBottom: "8px",
-            letterSpacing: ".5px"
-          }}
-        >
-          Join Team
-        </button>
-      </div>
-      {/* Pop-up form bottom right */}
-      <div
-        style={{
-          position: "fixed",
-          right: "28px",
-          bottom: showPopup ? "28px" : "-320px",
-          background: palette.accent,
-          borderRadius: "1.2rem",
-          border: `2px solid ${palette.border}`,
-          boxShadow: "0 11px 24px rgba(190,125,37,0.21)",
-          zIndex: 1000,
-          width: "350px",
-          maxWidth: "90vw",
-          padding: "32px 28px 24px 28px",
-          transition: "bottom 0.4s cubic-bezier(.44,.03,.56,.94), opacity 0.3s ease",
-          opacity: showPopup ? 1 : 0,
-          pointerEvents: showPopup ? "auto" : "none",
-        }}
-      >
-        <form onSubmit={handleSubmit} style={{ margin: "0" }}>
-          <h2 style={{
-            marginBottom: "18px",
-            color: palette.dark,
-            fontWeight: 700,
-            fontSize: "1.3rem",
-            textAlign: "center"
-          }}>
-            Get in touch
-          </h2>
-          <label
-            style={{ fontWeight: 550, fontSize: "1.08rem", marginBottom: 7, color: palette.dark, display: "block" }}>
-            Email
-          </label>
-          <input
-            type="email"
-            name="email"
-            required
-            value={form.email}
-            onChange={handleChange}
-            placeholder="Your email"
-            style={{
-              width: "100%",
-              padding: "13px 13px",
-              borderRadius: "0.8rem",
-              border: `2px solid ${palette.primary}`,
-              fontSize: "1.07rem",
-              background: "#fff",
-              marginBottom: "16px",
-              color: palette.dark,
-              outline: "none",
-              fontWeight: 530,
-              boxSizing: "border-box",
-            }}
-          />
-          <label
-            style={{ fontWeight: 550, fontSize: "1.08rem", marginBottom: 7, color: palette.dark, display: "block" }}>
-            Message
-          </label>
-          <textarea
-            name="message"
-            required
-            value={form.message}
-            onChange={handleChange}
-            placeholder="Say hello..."
-            rows={3}
-            style={{
-              width: "100%",
-              padding: "13px",
-              borderRadius: "0.8rem",
-              border: `2px solid ${palette.primary}`,
-              fontSize: "1.07rem",
-              background: "#fff",
-              color: palette.dark,
-              outline: "none",
-              fontWeight: 530,
-              marginBottom: "12px",
-              boxSizing: "border-box"
-            }}
-          />
-          <button
-            type="submit"
-            style={{
-              background: palette.primary,
-              color: "#fff",
-              padding: "12px 28px",
-              border: "none",
-              borderRadius: "1rem",
-              fontWeight: "700",
-              fontSize: "1.1rem",
-              float: "right",
-              marginTop: "9px",
-              cursor: "pointer",
-            }}
-          >
-            Submit
-          </button>
-        </form>
-      </div>
-      {/* Thank You popup bottom right */}
-      <div
-        style={{
-          position: "fixed",
-          right: "28px",
-          bottom: showThankYou ? "28px" : "-250px",
-          transform: "none",
-          background: palette.primary,
-          color: "#fff",
-          borderRadius: "1.2rem",
-          fontWeight: 620,
-          fontSize: "1.19rem",
-          border: `2px solid ${palette.border}`,
-          boxShadow: "0 9px 24px rgba(190,125,37,.17)",
-          padding: "25px 22px",
-          zIndex: 1100,
-          textAlign: "center",
-          opacity: showThankYou ? 1 : 0,
-          pointerEvents: showThankYou ? "auto" : "none",
-          transition: "bottom 0.35s cubic-bezier(.41,.12,.74,1), opacity 0.3s ease",
-        }}
-      >
-        Thank you for your response, will contact you soon
-      </div>
-      {/* Responsive breakpoints */}
-      <style>
-        {`
-          @media (max-width: 700px) {
-            div[style*="maxWidth: 640px"] {
-              padding: 32px 8vw !important;
-            }
-            div[style*="width: 350px"] {
-              width: 95vw !important;
-              padding: 20px 5vw !important;
-              right: 4vw !important;
-            }
-          }
-        `}
-      </style>
-    </div>
+    <>
+      <GlobalStyle />
+      <MainContainer>
+        {/* Shastra Samvad Header */}
+        <Header>
+          <Logo>Shastra Samvad</Logo>
+          <Tagline>Preserving Ancient Wisdom for Modern Times</Tagline>
+        </Header>
+
+        <ContentBox>
+          <Badge>Research Opportunity</Badge>
+          <Title>Join Our Research Team</Title>
+          <Description>
+            Collaborate with passionate researchers and scholars to explore ancient wisdom 
+            and make meaningful contributions to spiritual knowledge. Be part of a community 
+            dedicated to preserving and sharing sacred teachings.
+          </Description>
+          
+          <FeaturesList>
+            {features.map((feature, index) => (
+              <FeatureItem key={index}>
+                <FeatureIcon checked={feature.checked}>
+                  {feature.checked ? "✓" : ""}
+                </FeatureIcon>
+                <FeatureText>{feature.text}</FeatureText>
+              </FeatureItem>
+            ))}
+          </FeaturesList>
+
+          <JoinButton onClick={() => setShowModal(true)}>
+            Join Research Team
+          </JoinButton>
+        </ContentBox>
+
+        {/* Modal */}
+        {showModal && (
+          <ModalOverlay onClick={handleCloseModal}>
+            <ModalContent onClick={(e) => e.stopPropagation()}>
+              <ModalHeader>
+                <ModalTitle>Join Research Team</ModalTitle>
+                <CloseButton onClick={handleCloseModal}>×</CloseButton>
+              </ModalHeader>
+              
+              <Form onSubmit={handleSubmit}>
+                <FormGroup>
+                  <Label htmlFor="name">Full Name</Label>
+                  <Input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    placeholder="Enter your full name"
+                    required
+                  />
+                </FormGroup>
+                
+                <FormGroup>
+                  <Label htmlFor="email">Email Address</Label>
+                  <Input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    placeholder="Enter your email address"
+                    required
+                  />
+                </FormGroup>
+                
+                <FormGroup>
+                  <Label htmlFor="message">
+                    Why are you interested in joining our research team?
+                  </Label>
+                  <TextArea
+                    id="message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    placeholder="Share your background, interests, and what you hope to contribute..."
+                    required
+                  />
+                </FormGroup>
+                
+                <FormActions>
+                  <CancelButton type="button" onClick={handleCloseModal}>
+                    Cancel
+                  </CancelButton>
+                  <SubmitButton type="submit">
+                    Submit Application
+                  </SubmitButton>
+                </FormActions>
+              </Form>
+            </ModalContent>
+          </ModalOverlay>
+        )}
+
+        {/* Success Message */}
+        {showSuccess && (
+          <SuccessMessage>
+            <div>
+              <h3 style={{margin: '0 0 4px 0', color: '#2c1810'}}>Thank You!</h3>
+              <p style={{margin: 0, color: '#666', fontSize: '0.9rem'}}>
+                Your application has been received. We'll contact you shortly.
+              </p>
+            </div>
+          </SuccessMessage>
+        )}
+      </MainContainer>
+    </>
   );
-}
+};
 
 export default JoinResearchTeam;
