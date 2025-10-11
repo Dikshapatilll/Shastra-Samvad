@@ -81,28 +81,8 @@ const ContentBox = styled.div`
   animation: ${fadeIn} 0.8s ease-out;
   position: relative;
   margin-top: 20px;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: #000;
-  }
 `;
 
-const Badge = styled.div`
-  display: inline-block;
-  background: #e3b06d;
-  color: white;
-  padding: 8px 20px;
-  border-radius: 25px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  margin-bottom: 30px;
-`;
 
 const Title = styled.h1`
   font-size: 2.5rem;
@@ -385,7 +365,6 @@ const JoinResearchTeam = () => {
         </Header>
 
         <ContentBox>
-          <Badge>Research Opportunity</Badge>
           <Title>Join Our Research Team</Title>
           <Description>
             Collaborate with passionate researchers and scholars to explore ancient wisdom 
