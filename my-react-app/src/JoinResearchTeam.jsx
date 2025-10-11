@@ -13,14 +13,7 @@ const fadeIn = keyframes`
   }
 `;
 
-const float = keyframes`
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-`;
+
 
 // Global Styles
 const GlobalStyle = createGlobalStyle`
@@ -32,18 +25,12 @@ const GlobalStyle = createGlobalStyle`
   
   body {
     font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: #fdf6ed;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background: #e3b06d;
     min-height: 100vh;
   }
 
   #root {
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     min-height: 100vh;
   }
 `;
@@ -57,21 +44,22 @@ const MainContainer = styled.div`
   min-height: 100vh;
   width: 100%;
   padding: 20px;
-  background: linear-gradient(135deg, #fff9f0 0%, #fdf6ed 100%);
+  background:#e3b06d;
+  padding-top: 0px;
 `;
 
 const Header = styled.div`
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 1px;
   animation: ${fadeIn} 0.8s ease-out;
 `;
 
 const Logo = styled.div`
-  font-size: 3rem;
+  font-size: 4rem;
   font-weight: 700;
-  color: #e3b06d;
+  color: #5c2000ff;
   margin-bottom: 10px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  text-shadow: 2px 2px 4px rgba(253, 208, 86, 1);
 `;
 
 const Tagline = styled.p`
@@ -86,12 +74,13 @@ const ContentBox = styled.div`
   border-radius: 20px;
   padding: 60px 50px;
   box-shadow: 0 20px 60px rgba(227, 176, 109, 0.15);
-  border: 2px solid #e3b06d;
-  max-width: 600px;
+  border: 2px solid #000000;
+  max-width: 900px;
   width: 100%;
   text-align: center;
   animation: ${fadeIn} 0.8s ease-out;
   position: relative;
+  margin-top: 20px;
 
   &::before {
     content: '';
@@ -100,7 +89,7 @@ const ContentBox = styled.div`
     left: 0;
     right: 0;
     height: 4px;
-    background: #e3b06d;
+    background: #000;
   }
 `;
 
@@ -113,7 +102,6 @@ const Badge = styled.div`
   font-size: 0.9rem;
   font-weight: 600;
   margin-bottom: 30px;
-  animation: ${float} 3s ease-in-out infinite;
 `;
 
 const Title = styled.h1`
@@ -307,7 +295,7 @@ const CancelButton = styled.button`
   background: transparent;
   color: #666;
   border: 2px solid #ddd;
-  padding: 12px 24px;
+  padding: 10px 18px;
   border-radius: 8px;
   font-weight: 500;
   cursor: pointer;
@@ -357,11 +345,6 @@ const JoinResearchTeam = () => {
     message: ""
   });
 
-  const features = [
-    { text: "Access to Ancient Texts", checked: false },
-    { text: "Expert Collaboration", checked: true },
-    { text: "Global Community", checked: false }
-  ];
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -410,16 +393,6 @@ const JoinResearchTeam = () => {
             dedicated to preserving and sharing sacred teachings.
           </Description>
           
-          <FeaturesList>
-            {features.map((feature, index) => (
-              <FeatureItem key={index}>
-                <FeatureIcon checked={feature.checked}>
-                  {feature.checked ? "✓" : ""}
-                </FeatureIcon>
-                <FeatureText>{feature.text}</FeatureText>
-              </FeatureItem>
-            ))}
-          </FeaturesList>
 
           <JoinButton onClick={() => setShowModal(true)}>
             Join Research Team
